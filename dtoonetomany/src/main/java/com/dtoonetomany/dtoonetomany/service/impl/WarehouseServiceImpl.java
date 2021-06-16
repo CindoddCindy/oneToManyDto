@@ -7,6 +7,7 @@ import com.dtoonetomany.dtoonetomany.model.Shelf;
 import com.dtoonetomany.dtoonetomany.model.Warehouse;
 import com.dtoonetomany.dtoonetomany.repository.WarehouseRepository;
 import com.dtoonetomany.dtoonetomany.service.WarehouseService;
+import com.dtoonetomany.dtoonetomany.validation.WarehouseDtoValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,15 +21,16 @@ public class WarehouseServiceImpl implements WarehouseService {
 
 
     private final WarehouseRepository warehouseRepository;
-    //private final WarehouseDtoValidator warehouseValidator;
+    private final WarehouseDtoValidator warehouseValidator;
 
     @Autowired
     public WarehouseServiceImpl(
-           // WarehouseDtoValidator warehouseValidator
-            WarehouseRepository warehouseRepository
+
+            WarehouseRepository warehouseRepository,
+            WarehouseDtoValidator warehouseValidator
             ) {
         this.warehouseRepository = warehouseRepository;
-       // this.warehouseValidator = warehouseValidator;
+        this.warehouseValidator = warehouseValidator;
     }
 
     @Override
@@ -51,7 +53,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public WarehouseDto save(WarehouseDto warehouseDto) {
-        //this.warehouseValidator.validate(warehouseDto);
+        this.warehouseValidator.validate(warehouseDto);
         Warehouse warehouse = this.dtoToEntity(warehouseDto);
         Warehouse savedWarehouse = this.warehouseRepository.save(warehouse);
         return new WarehouseDto(savedWarehouse);

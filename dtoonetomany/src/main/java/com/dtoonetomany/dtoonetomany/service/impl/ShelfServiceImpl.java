@@ -7,6 +7,7 @@ import com.dtoonetomany.dtoonetomany.model.Warehouse;
 import com.dtoonetomany.dtoonetomany.repository.ShelfRepository;
 import com.dtoonetomany.dtoonetomany.repository.WarehouseRepository;
 import com.dtoonetomany.dtoonetomany.service.ShelfService;
+import com.dtoonetomany.dtoonetomany.validation.ShelfDtoValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,17 +20,18 @@ public class ShelfServiceImpl implements ShelfService {
 
     private final ShelfRepository shelfRepository;
     private final WarehouseRepository warehouseRepository;
-   // private final ShelfDtoValidator shelfValidator;
+    private final ShelfDtoValidator shelfValidator;
 
     @Autowired
     public ShelfServiceImpl(
-           // ShelfDtoValidator shelfValidator
+           //
             ShelfRepository shelfRepository,
-            WarehouseRepository warehouseRepository
+            WarehouseRepository warehouseRepository,
+           ShelfDtoValidator shelfValidator
             ) {
         this.shelfRepository = shelfRepository;
         this.warehouseRepository = warehouseRepository;
-        //this.shelfValidator = shelfValidator;
+        this.shelfValidator = shelfValidator;
     }
 
     @Override
@@ -52,7 +54,7 @@ public class ShelfServiceImpl implements ShelfService {
 
     @Override
     public ShelfDto save(ShelfDto shelfDto) {
-       // this.shelfValidator.validate(shelfDto);
+        this.shelfValidator.validate(shelfDto);
         Shelf shelf = this.dtoToEntity(shelfDto);
         Shelf savedShelf = this.shelfRepository.save(shelf);
         return new ShelfDto(savedShelf);
